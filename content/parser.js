@@ -23,6 +23,10 @@ Content_Parser.prototype.__proto__ = Deferrable.prototype;
 Content_Parser.prototype.load = function(file) {
 	var promise = new Promise();
 
+	if(typeof Inio_JSON === 'undefined'){
+		throw new Error('Configuration file `inio.js` is missing');
+	}
+
 	if (!file && Inio_JSON instanceof Array) {
 		this.data = Inio_JSON;
 
@@ -39,23 +43,11 @@ Content_Parser.prototype.load = function(file) {
  */
 Content_Parser.prototype.validate = function() {
 	if (!(this.data instanceof Array)) {
-		throw new Error('Invalid data format');
-	}
-
-	if (!this.find('filters')) {
-		throw new Error('Missing component id `filters`');
-	}
-
-	if (!this.find('content')) {
-		throw new Error('Missing component id `content`');
-	}
-
-	if (!this.find('providers')) {
-		throw new Error('Missing component id `providers`');
+		throw new Error('Invalid data format of the `inio.js` config file');
 	}
 
 	if (!this.find('configuration')) {
-		throw new Error('Missing component id `configuration`');
+		//throw new Error('Missing component id `configuration` in `inio.js` config file');
 	}
 };
 
@@ -65,21 +57,7 @@ Content_Parser.prototype.validate = function() {
  * @return {Function}
  */
 Content_Parser.prototype.getComponentFunc = function(path) {
-	var p = path.split('.'),
-		obj;
-
-	obj = Component;
-
-	for (var i in p) {
-		if (typeof obj[p[i]] === 'function') {
-			obj = obj[p[i]];
-
-		} else {
-			return false;
-		}
-	}
-
-	return obj;
+	return Content.getComponent(path);
 };
 
 /**
@@ -148,7 +126,9 @@ Content_Parser.prototype.find = function(path, returnAttr) {
 			return inst;
 
 		} else {
-			throw new Error('Unknown component `' + obj.component + '`. Please install new component with this name.');
+			throw new Error('Component `' + obj.component + '` is not installed.');
 		}
 	}
+
+	return false;
 };

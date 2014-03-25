@@ -70,6 +70,12 @@ Scene_Home.prototype.focus = function() {
 	this.carousel.focus();
 };
 /**
+ * @inheritdoc Scene#onClick
+ */
+Scene_Home.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};
+/**
  * @inheritdoc Scene#onEnter
  */
 Scene_Home.prototype.onEnter = function($el) {

@@ -1,18 +1,17 @@
 /**
- * Component.configuration
+ * `configuration` component
  *
  * @author Mautilus s.r.o.
  * @class Component.configuration
  * @extends Component
  */
-Component.configuration = function() {
-	Component.apply(this, arguments);
-};
+(function(Component) {
+	function Configuration() {
+		Component.apply(this, arguments);
+	};
 
-Component.configuration.prototype.__proto__ = Component.prototype;
-/**
- * @inheritdoc Component#getComponentType
- */
-Component.configuration.prototype.getComponentType = function() {
-	return 'configuration';
-};
+	Configuration.prototype.__proto__ = Component.prototype;
+
+	Content.registerComponent('configuration', Configuration);
+
+})(Component);

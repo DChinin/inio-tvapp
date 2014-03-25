@@ -10,7 +10,7 @@
 var __global = this;
 
 var Inio = {
-	VERSION: '2.0.0',
+	VERSION: '2.0.1',
 	// private properties
 	stack: [],
 	isReady: false,
@@ -22,26 +22,43 @@ var Inio = {
 			__global.CONFIG = {};
 		}
 
-		this.debug = new Inio_Debug(CONFIG.debug);
+		this.debug = null;
 		this.device = null;
 		this.player = null;
 		this.storage = null;
 		this.connector = null;
 		this.monitor = null;
 
-		if (typeof Inio_Connector !== 'undefined') {
-			this.connector = new Inio_Connector(CONFIG.connector);
+		try {
+			this.initContent().done(function() {
+				if(this.configuration){
+					this.extend(__global.CONFIG, this.configuration.attributes());
+				}
 
-			if (this.debug.launchpad && this.debug.consoleAddr) {
-				this.connector.setConsoleAddr(this.debug.consoleAddr);
-			}
+				this.debug = new Inio_Debug(CONFIG.debug);
 
-			this.connector.connect(function() {
-				this.initCore();
+				if (typeof Inio_Connector !== 'undefined') {
+					this.connector = new Inio_Connector(CONFIG.connector);
+
+					if (this.debug.launchpad && this.debug.consoleAddr) {
+						this.connector.setConsoleAddr(this.debug.consoleAddr);
+					}
+
+					this.connector.connect(function() {
+						this.initCore();
+					}, this);
+
+				} else {
+					this.initCore();
+				}
+
+			}, this).fail(function() {
+				throw new Error('Failed to initialize Content module');
 			}, this);
 
-		} else {
-			this.initCore();
+		} catch (e) {
+			console.error(e);
+			this.displayError(e);
 		}
 	},
 	/**
@@ -49,6 +66,23 @@ var Inio = {
 	 */
 	deinit: function() {
 		this.onUnload();
+	},
+	/**
+	 * Initialize Content provider
+	 * @return {Promise}
+	 */
+	initContent: function() {
+		if (typeof Content === 'undefined') {
+			// if the Content module is not available, lets assume, that we are not using inio.js config file
+			var promise = new Promise();
+			promise.resolve();
+
+			return promise;
+		}
+
+		return Content.init().done(function() {
+			this.configuration = Content.find('configuration');
+		}, this);
 	},
 	/**
 	 * Push new callback to the onReady event
@@ -189,7 +223,8 @@ var Inio = {
 	 * @returns {Object}
 	 */
 	extend: function(target) {
-		var i = 1, o, n, isDefinedProperty, defineProperty;
+		var i = 1,
+			o, n, isDefinedProperty, defineProperty;
 
 		isDefinedProperty = function(obj) {
 			return (typeof obj == 'object' && (
@@ -273,6 +308,35 @@ var Inio = {
 		this.device.exit = function() {
 			window.location.href = Inio.debug.launchpad;
 		};
+	},
+	/**
+	 * Display error dialog
+	 * @param {Error} error
+	 */
+	displayError: function(error) {
+		var $el = document.createElement('div');
+		$el.className = 'inio-error';
+
+		this.extend($el.style, {
+			position: 'absolute',
+			zIndex: '99',
+			top: '50%',
+			left: 0,
+			width: '100%',
+			height: '240px',
+			margin: '-120px 0 0 0',
+			textAlign: 'center',
+			background: '#000',
+			boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.25)',
+			color: '#fff',
+			fontSize: '24px',
+			lineHeight: '230px',
+			boxSizing: 'border-box'
+		});
+
+		$el.innerHTML = error.toString();
+
+		document.body.appendChild($el);
 	}
 };
 

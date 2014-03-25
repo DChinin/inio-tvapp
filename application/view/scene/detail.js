@@ -122,6 +122,12 @@ Scene_Detail.prototype.navigate = function(direction) {
 	}
 };
 /**
+ * @inheritdoc Scene#onClick
+ */
+Scene_Detail.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};
+/**
  * @inheritdoc Scene#onReturn
  */
 Scene_Detail.prototype.onEnter = function($el) {

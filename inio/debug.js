@@ -50,6 +50,10 @@ Inio_Debug.prototype.init = function(config) {
 		}
 	}
 
+	if(config && config.production === true){
+		config.active = false;
+	}
+
 	this.configure(config);
 
 	this.polyfillConsole();

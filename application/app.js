@@ -23,6 +23,8 @@ var App = (function() {
 		}, this);
 	};
 
+	Factory.prototype.VERSION = '1.0.2';
+
 	Factory.prototype.__proto__ = Events.prototype;
 	Factory.prototype.__proto__.__proto__ = Deferrable.prototype;
 
@@ -40,8 +42,20 @@ var App = (function() {
 
 		preloader = this.displayPreloader();
 
-		Content.init().done(function() {
-			this.configuration = Content.find('configuration');
+		// validate inio.js components...
+		if (!Content.find('filters')) {
+			throw new Error('Missing component id `filters` in `inio.js` config file');
+		}
+
+		if (!Content.find('content')) {
+			throw new Error('Missing component id `content` in `inio.js` config file');
+		}
+
+		if (!Content.find('providers')) {
+			throw new Error('Missing component id `providers` in `inio.js` config file');
+		}
+
+		try {
 			this.sections = Content.find('filters.sections');
 
 			this.sections.load().done(function() {
@@ -49,7 +63,11 @@ var App = (function() {
 					this.run();
 				}, this);
 			}, this);
-		}, this);
+
+		} catch (e) {
+			console.error(e);
+			Inio.displayError(e);
+		}
 	};
 	/**
 	 * Register scenes and route to the `main` scene
@@ -157,12 +175,12 @@ var App = (function() {
 		this.$throbber.show();
 		this.$throbberInner.width('100%');
 
-		if(cls){
+		if (cls) {
 			this.$throbber.addClass(cls);
 			this.$throbber._removeCls = cls;
 		}
 
-		if(this._throbberTimeout){
+		if (this._throbberTimeout) {
 			clearTimeout(this._throbberTimeout);
 		}
 	};
@@ -172,15 +190,15 @@ var App = (function() {
 
 		this.$throbberInner.addClass('no-anim');
 
-		if(this._throbberTimeout){
+		if (this._throbberTimeout) {
 			clearTimeout(this._throbberTimeout);
 		}
 
-		this._throbberTimeout = setTimeout(function(){
+		this._throbberTimeout = setTimeout(function() {
 			scope.$throbberInner.width(0).removeClass('no-anim');
 			scope.$throbber.hide();
 
-			if(scope.$throbber._removeCls){
+			if (scope.$throbber._removeCls) {
 				scope.$throbber.removeClass(scope.$throbber._removeCls);
 				scope.$throbber._removeCls = null;
 			}

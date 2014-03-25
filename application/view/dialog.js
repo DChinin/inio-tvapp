@@ -76,3 +76,9 @@ View_Dialog.prototype.onReturn = function() {
 	this.close();
 	return false;
 };
+/**
+ * @inheritdoc View#onClick
+ */
+View_Dialog.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};

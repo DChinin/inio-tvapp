@@ -85,7 +85,13 @@ var Inio_JSON = [{
 	"component": "configuration",
 	"id": "configuration",
 	"attrs": {
-		"version": "1.0.1",
-		"appName": "inio"
+		"version": "1.0.2",
+		"appName": "inio",
+		"debug": {
+			"production": true
+		},
+		"template": {
+			"basePath": "template/"
+		}
 	}
 }];

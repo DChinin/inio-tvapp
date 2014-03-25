@@ -43,7 +43,7 @@ module.exports = function(grunt, projectPath) {
 				dest: 'dist/application.js'
 			},
 			content: {
-				src: ['content/**/*.js'],
+				src: ['content/content.js', 'content/parser.js', 'content/model.js', 'content/component.js', 'content/**/*.js'],
 				dest: 'dist/content.js'
 			}
 		},

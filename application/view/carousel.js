@@ -16,11 +16,16 @@ View_Carousel.prototype.index = 0;
 View_Carousel.prototype.init = function() {
 
 };
-
+/**
+ * Set data collection
+ * @param {Collection/Component}
+ */
 View_Carousel.prototype.setCollection = function(collection) {
 	this.collection = collection;
 };
-
+/**
+ * @private
+ */
 View_Carousel.prototype.setIndex = function(index) {
 	var i = this.index;
 
@@ -49,6 +54,9 @@ View_Carousel.prototype.render = function() {
 		this.renderItems();
 	}, this);
 };
+/**
+ * @private
+ */
 View_Carousel.prototype.renderItems = function() {
 	var idx, item;
 
@@ -82,6 +90,9 @@ View_Carousel.prototype.renderItems = function() {
 		this.onFocus(Focus.focused);
 	}
 };
+/**
+ * @inheritdoc View#navigate
+ */
 View_Carousel.prototype.navigate = function(direction) {
 	if (this._animating) {
 		return false;
@@ -106,6 +117,9 @@ View_Carousel.prototype.navigate = function(direction) {
 		}, this);*/
 	}
 };
+/**
+ * @private
+ */
 View_Carousel.prototype.animate = function(direction) {
 	this._animating = true;
 
@@ -117,9 +131,15 @@ View_Carousel.prototype.animate = function(direction) {
 		this._animating = false;
 	}, this);
 };
+/**
+ * @inheritdoc View#focus
+ */
 View_Carousel.prototype.focus = function() {
 	return Focus.to(this.getFocusable(0, true));
 };
+/**
+ * @inheritdoc View#onFocus
+ */
 View_Carousel.prototype.onFocus = function($el) {
 	var title;
 

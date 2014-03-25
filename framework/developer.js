@@ -19,7 +19,7 @@ var Developer = (function() {
 		/**
 		 * @cfg {Boolean} active TRUE to active tools after start up
 		 */
-		this.config.active = false;
+		this.config.active = true;
 		/**
 		 * @cfg {String} console URL address to the remote console
 		 */
@@ -62,6 +62,14 @@ var Developer = (function() {
 		this.inputBuffer = '';
 		this.networkConsoleStack = [];
 		this._console = null;
+
+		if (Inio.debug && Inio.debug.config.production !== true) {
+			if (typeof config === 'undefined') {
+				config = {};
+			}
+
+			config.debug = true;
+		}
 
 		this.configure(config);
 
@@ -322,10 +330,19 @@ var Developer = (function() {
 	 * @private
 	 */
 	Factory.prototype.uiToggleInfo = function() {
+		var config;
+
+		if(Inio.configuration){
+			config = Inio.configuration.attributes();
+
+		} else {
+			config = {};
+		}
+
 		this.$elContent.toggle();
 
 		if (this.$elContent.is(':visible')) {
-			this.$elContent.html("Inio:\t\t" + Inio.VERSION + "\r" + Device.getInfo());
+			this.$elContent.html("Inio SDK:\t\t" + Inio.VERSION + "\r" + "Inio Content:\t\t" + (typeof Content !== 'undefined' ? Content.VERSION : '-') + "\r" + "Inio TV App:\t\t" + ((App && App.VERSION) ? App.VERSION : 'N/A') + "\r" + "inio.js:\t\t" + (config.version ? config.version : '-') + "\r" +Device.getInfo());
 		}
 	};
 	/**

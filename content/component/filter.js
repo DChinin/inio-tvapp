@@ -1,24 +1,26 @@
 /**
- * Component.filter
+ * `filter` component
  *
  * @author Mautilus s.r.o.
  * @class Component.filter
  * @extends Component
  */
-Component.filter = function() {
-	Component.apply(this, arguments);
-};
+(function(Component) {
+	function Filter() {
+		Component.apply(this, arguments);
+	};
 
-Component.filter.prototype.__proto__ = Component.prototype;
-/**
- * @inheritdoc Component#init
- */
-Component.filter.prototype.init = function() {
-	this.isStructured = true;
-};
-/**
- * @inheritdoc Component#getComponentType
- */
-Component.filter.prototype.getComponentType = function() {
-	return 'filter';
-};
+	Filter.prototype.isStructured = true;
+
+	Filter.prototype.__proto__ = Component.prototype;
+
+	/**
+	 * @inheritdoc Component#normalize
+	 */
+	Filter.prototype.normalize = function(attrs) {
+		return new Content_Model_Filter(attrs);
+	};
+
+	Content.registerComponent('filter', Filter);
+
+})(Component);

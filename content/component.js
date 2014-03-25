@@ -73,13 +73,6 @@ Component.prototype.attributes = function(attrs) {
 	return this.attrs;
 };
 /**
- * Return component's type
- * @return {String}
- */
-Component.prototype.getComponentType = function() {
-	return '';
-};
-/**
  * Populate component with data
  * @return {Promise}
  */

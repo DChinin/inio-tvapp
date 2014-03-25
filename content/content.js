@@ -11,6 +11,9 @@ var Content = (function() {
 		Deferrable.call(this);
 	};
 
+	Factory.prototype.VERSION = '1.0.1';
+	Factory.prototype.components = {};
+
 	Factory.prototype.__proto__ = Deferrable.prototype;
 
 	Factory.prototype.init = function() {
@@ -19,13 +22,43 @@ var Content = (function() {
 		return this.parser.load();
 	};
 	/**
+	 * Register new component
+	 *
+	 * @param {String} path
+	 * @param {Object} component
+	 */
+	Factory.prototype.registerComponent = function(path, component) {
+		this.components[path] = component;
+	};
+	/**
+	 * Get registered component
+	 *
+	 * @param {String} path
+	 * @return {Object}
+	 */
+	Factory.prototype.getComponent = function(path) {
+		if (typeof this.components[path] !== 'undefined') {
+			return this.components[path];
+		}
+
+		return false;
+	};
+	/**
 	 * Find component by its path
 	 *
 	 * @param {String} path
 	 * @return {Object}
 	 */
 	Factory.prototype.find = function(path) {
-		return this.parser.find.apply(this.parser, arguments);
+		try {
+			return this.parser.find.apply(this.parser, arguments);
+
+		} catch (e) {
+			console.error(e);
+			Inio.displayError(e);
+		}
+
+		return false;
 	};
 	/**
 	 * AJAX request

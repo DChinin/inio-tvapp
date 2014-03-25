@@ -272,6 +272,12 @@ Scene_Player.prototype.navigate = function(direction) {
 	}
 };
 /**
+ * @inheritdoc Scene#onClick
+ */
+Scene_Player.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};
+/**
  * @inheritdoc Scene#onEnter
  */
 Scene_Player.prototype.onEnter = function($el) {

@@ -122,6 +122,12 @@ View_Navigation_Submenu.prototype.onScroll = function($el, delta) {
 	}
 };
 /**
+ * @inheritdoc View#onClick
+ */
+View_Navigation_Submenu.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};
+/**
  * @inheritdoc View#onEnter
  */
 View_Navigation_Submenu.prototype.onEnter = function($el) {

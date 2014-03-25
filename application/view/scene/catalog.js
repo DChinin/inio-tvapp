@@ -67,6 +67,12 @@ Scene_Catalog.prototype.focus = function() {
 	this.catalog.focus(0);
 };
 /**
+ * @inheritdoc Scene#onClick
+ */
+Scene_Catalog.prototype.onClick = function() {
+	return this.onEnter.apply(this, arguments);
+};
+/**
  * @inheritdoc Scene#onEnter
  */
 Scene_Catalog.prototype.onEnter = function($el) {

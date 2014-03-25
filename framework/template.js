@@ -23,7 +23,7 @@ var Template = (function() {
 			/**
 			 * @cfg {String} basePath Path to the directory that contains templates
 			 */
-			basePath: null
+			basePath: 'template/'
 		};
 
 		// Initialize this class when Inio is ready
