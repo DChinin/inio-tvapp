@@ -8,6 +8,8 @@
 (function(Component) {
 	function Brightcove_Playlist() {
 		Component.apply(this, arguments);
+
+		this.filetrId = null;
 	};
 
 	Brightcove_Playlist.prototype.__proto__ = Component.prototype;
@@ -35,6 +37,16 @@
 	 */
 	Brightcove_Playlist.prototype.load = function(filterId) {
 		var promise = new Promise();
+
+		if(this.filterId === filterId){
+			promise.resolve();
+
+			return promise.done(function() {
+				this.loaded = true;
+			}, this);
+		}
+
+		this.filterId = filterId;
 
 		Content.ajax(this.provider.attr('endpoint'), {
 			type: 'json',

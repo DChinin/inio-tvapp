@@ -13,6 +13,7 @@ var Content = (function() {
 
 	Factory.prototype.VERSION = '1.0.1';
 	Factory.prototype.components = {};
+	Factory.prototype.instances = {};
 
 	Factory.prototype.__proto__ = Deferrable.prototype;
 
@@ -47,11 +48,18 @@ var Content = (function() {
 	 * Find component by its path
 	 *
 	 * @param {String} path
+	 * @param {Boolean} forceNew TRUE to force new instance
 	 * @return {Object}
 	 */
-	Factory.prototype.find = function(path) {
+	Factory.prototype.find = function(path, forceNew) {
 		try {
-			return this.parser.find.apply(this.parser, arguments);
+			if(! forceNew && this.instances[path]){
+				return this.instances[path];
+			}
+
+			this.instances[path] = this.parser.find.apply(this.parser, arguments);
+
+			return this.instances[path];
 
 		} catch (e) {
 			console.error(e);

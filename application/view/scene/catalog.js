@@ -34,11 +34,17 @@ Scene_Catalog.prototype.onShow = function() {
  * @inheritdoc Scene#activate
  */
 Scene_Catalog.prototype.activate = function(filterId, filterName) {
+	var reset;
+
 	this.filterName = filterName;
 	this.collection = Content.find('content.catalog');
 
+	if(this.collection.filterId !== filterId){
+		reset = true;
+	}
+
 	return this.collection.load(filterId).done(function() {
-		this.catalog.setCollection(this.collection);
+		this.catalog.setCollection(this.collection, reset);
 	}, this);
 };
 /**
@@ -64,7 +70,9 @@ Scene_Catalog.prototype.render = function() {
  * @inheritdoc Scene#focus
  */
 Scene_Catalog.prototype.focus = function() {
-	this.catalog.focus(0);
+	if(this.catalog.focus() === false){
+		App.sidebar.focus();
+	}
 };
 /**
  * @inheritdoc Scene#onClick

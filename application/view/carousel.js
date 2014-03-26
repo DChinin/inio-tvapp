@@ -58,8 +58,9 @@ View_Carousel.prototype.render = function() {
  * @private
  */
 View_Carousel.prototype.renderItems = function() {
-	var idx, item;
+	var idx, item, emptySrc;
 
+	emptySrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=';
 	startAt = this.index - 2;
 
 	for (var i = 0; i < 5; i++) {
@@ -74,11 +75,20 @@ View_Carousel.prototype.renderItems = function() {
 
 		this.collection.at(idx).done((function($el, idx){
 			return function(item){
+				var img;
+
 				if ($el.attr('data-idx') != idx) {
 					$el.attr('data-idx', idx);
 					$el.attr('data-title', item.title);
 					$el.attr('data-id', item.id);
-					$el.find('.pic').css('background-image', 'url("' + item.thumbnail + '")');
+
+					img = $el.find('img.pic');
+					img.attr('src', emptySrc).attr('src', item.thumbnail).removeClass('no-image');
+
+					img.bind('error', function(e){
+						this.src = emptySrc;
+						this.className += ' no-image';
+					});
 				}
 			};
 		})(this.$elLIs.eq(i), idx));

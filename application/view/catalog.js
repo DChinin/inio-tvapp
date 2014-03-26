@@ -20,9 +20,13 @@ View_Catalog.prototype.collection = null;
 View_Catalog.prototype.init = function() {
 
 };
-View_Catalog.prototype.setCollection = function(collection) {
+View_Catalog.prototype.setCollection = function(collection, reset) {
 	this.collection = collection;
-	this.setIndex(0);
+
+	if(reset === true){
+		this.setIndex(0);
+		this._focusIndex = 0;
+	}
 };
 /**
  * @inheritdoc View#render
@@ -118,6 +122,12 @@ View_Catalog.prototype.renderItems = function() {
 		}
 
 		this.$elUl.html(str);
+
+		this.$elUl.find('img').bind('error', function(e){
+			this.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=';
+			this.className += ' no-image';
+		});
+
 	}, this);
 };
 /**
