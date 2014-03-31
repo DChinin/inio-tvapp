@@ -88,7 +88,7 @@ var Inio_JSON = [{
 		"version": "1.0.2",
 		"appName": "inio",
 		"debug": {
-			"production": true
+			"production": false
 		},
 		"template": {
 			"basePath": "template/"

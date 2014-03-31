@@ -44,6 +44,7 @@ Scene_Catalog.prototype.activate = function(filterId, filterName) {
 	}
 
 	return this.collection.load(filterId).done(function() {
+		//this.catalog.setFormat('landscape', 4, 4, 3);
 		this.catalog.setCollection(this.collection, reset);
 	}, this);
 };

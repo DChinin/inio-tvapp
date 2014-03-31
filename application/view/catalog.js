@@ -12,6 +12,7 @@ function View_Catalog() {
 View_Catalog.prototype.__proto__ = View.prototype;
 
 View_Catalog.prototype.index = 0;
+View_Catalog.prototype.format = 'portrait';
 View_Catalog.prototype.rows = 3;
 View_Catalog.prototype.rowsVisible = 2;
 View_Catalog.prototype.cols = 6;
@@ -27,6 +28,19 @@ View_Catalog.prototype.setCollection = function(collection, reset) {
 		this.setIndex(0);
 		this._focusIndex = 0;
 	}
+};
+/**
+ * Set cover format
+ * @param {String} format `landscape` or `portrait`
+ * @param {Number} rows Number of rows
+ * @param {Number} cols Number of columns
+ */
+View_Catalog.prototype.setFormat = function(format, rows, cols, rowsVisible) {
+	this.format = format || 'portrait';
+
+	if(rows !== undefined) this.rows = rows >> 0;
+	if(cols !== undefined) this.cols = cols >> 0;
+	if(rowsVisible !== undefined) this.rowsVisible = rowsVisible >> 0;
 };
 /**
  * @inheritdoc View#render

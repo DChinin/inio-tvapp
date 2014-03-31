@@ -76,7 +76,7 @@ var Content = (function() {
 	 * @return {Promise}
 	 */
 	Factory.prototype.ajax = function(url, options) {
-		var xhr, opts, serialize, promise, resp, headers, tmp;
+		var xhr, opts, serialize, promise, resp, headers, tmp, uid;
 
 		promise = new Promise();
 		headers = {};
@@ -139,15 +139,28 @@ var Content = (function() {
 						resp = JSON.parse(resp);
 
 					} catch (e) {
+						if(console.network !== undefined){
+							console.network(uid, 'error', '>>> ' + xhr.statusText.toUpperCase() + ' [' + xhr.status + ' ' + xhr.statusText + '] ' + resp);
+						}
+
 						promise.reject('parse', resp, headers, xhr);
 						return;
 					}
 				}
 
 				if (xhr.status === 0 || (xhr.status >= 400 && xhr.status <= 599)) {
+					console.log(xhr)
+					if(console.network !== undefined){
+						console.network(uid, 'error', '>>> ' + xhr.statusText.toUpperCase() + ' [' + xhr.status + ' ' + xhr.statusText + '] ' + resp);
+					}
+
 					promise.reject('status', resp, headers, xhr);
 
 				} else {
+					if(console.network !== undefined){
+						console.network(uid, xhr.statusText);
+					}
+
 					promise.resolve(resp, headers, xhr);
 				}
 			}
@@ -164,6 +177,10 @@ var Content = (function() {
 		xhr.onabort = function(ev) {
 			promise.reject('abort', resp, headers, xhr);
 		};
+
+		if(console.network !== undefined){
+			uid = console.network(opts.method || 'GET', url);
+		}
 
 		xhr.open(opts.method || 'GET', url);
 

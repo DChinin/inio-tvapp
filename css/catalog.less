@@ -1,5 +1,7 @@
 @catalogItemWidth: 178px;
 @catalogItemHeight: 269px;
+@catalogItemWidthLandscape: 274px;
+@catalogItemHeightLandscape: 153px;
 @colorCatalogBorder: #64a7a5;
 
 .catalog {
@@ -43,6 +45,18 @@
 
 		li.focus {
 			border-color: @colorCatalogBorder;
+		}
+	}
+}
+
+.catalog.format-landscape {
+	li {
+		width: @catalogItemWidthLandscape;
+		height: @catalogItemHeightLandscape;
+
+		img {
+			width: @catalogItemWidthLandscape;
+			height: @catalogItemHeightLandscape;
 		}
 	}
 }

@@ -143,12 +143,16 @@ Scene_Player.prototype.render = function() {
 
 		this.showUI();
 
+		this.$elControls = this.$el.find('.controls');
 		this.$elCurrentTime = this.$el.find('.current-time');
 		this.$elDuration = this.$el.find('.duration');
 		this.$elProgressBar = this.$el.find('.progress-bar .inner');
 		this.$elScrubber = this.$el.find('.scrubber');
 		this.$elPlayBtn = this.$el.find('li[data-btn="play"]');
 		this.$elPlayBtnIcon = this.$elPlayBtn.find('> span');
+		this.$elUpBtn = this.$el.find('li[data-btn="episodes"]');
+		this.$elUpBtnIcon = this.$elUpBtn.find('> span');
+		this.$elLanguages = this.$el.find('.popup-language');
 	}, this);
 };
 /**
@@ -202,7 +206,13 @@ Scene_Player.prototype.onBeforeHide = function() {
  * @inheritdoc Scene#focus
  */
 Scene_Player.prototype.focus = function() {
-	Focus.to(this.getFocusable(0, true));
+	if(this._lastFocusBtn){
+		if(Focus.to(this._lastFocusBtn) !== false){
+			return;
+		}
+	}
+
+	Focus.to(this.getFocusable(0, true, this.$elControls));
 };
 /**
  * @private
@@ -225,7 +235,7 @@ Scene_Player.prototype.showUI = function() {
  * @private
  */
 Scene_Player.prototype.hideUI = function() {
-	if (Player.getState() === Player.STATE_PAUSED) {
+	if (Player.getState() === Player.STATE_PAUSED || this.listSeasonVisible) {
 		return;
 	}
 
@@ -244,6 +254,8 @@ Scene_Player.prototype.hideUI = function() {
  * @inheritdoc Scene#navigate
  */
 Scene_Player.prototype.navigate = function(direction) {
+	var col;
+
 	if(this.scrubberVisible){
 		if (direction === 'down') {
 			this.hideScrubber();
@@ -253,6 +265,38 @@ Scene_Player.prototype.navigate = function(direction) {
 
 		} else if(direction === 'left'){
 			this.moveScrubber(-1);
+		}
+
+		return false;
+
+	} else if(this.popUpVisible){
+		col = Focus.focused.parents('.col').eq(0);
+
+		if (direction === 'down') {
+			if(Focus.to(this.getFocusable(1, true, col)) === false){
+				this.hideLanguage();
+			}
+
+		} else if (direction === 'up') {
+			Focus.to(this.getFocusable(-1, true, col));
+
+		} else if(direction === 'right'){
+			col = col.next();
+			Focus.to(this.getFocusable(0, false, col));
+
+		} else if(direction === 'left'){
+			col = col.prev();
+			Focus.to(this.getFocusable(0, false, col));
+		}
+
+		return false;
+
+	} else if(this.listSeasonVisible){
+		if (direction === 'down') {
+			// scroll list
+
+		} else if (direction === 'up') {
+			// scroll list
 		}
 
 		return false;
@@ -269,6 +313,14 @@ Scene_Player.prototype.navigate = function(direction) {
 	}  else if (direction === 'up' && Player.getDuration() && Player.getState() !== Player.STATE_PAUSED) {
 		this.showScrubber();
 		return false;
+	}
+};
+/**
+ * @inheritdoc Scene#onFocus
+ */
+Scene_Player.prototype.onFocus = function($el) {
+	if($el && $el.attr('data-btn')){
+		this._lastFocusBtn = $el;
 	}
 };
 /**
@@ -307,6 +359,30 @@ Scene_Player.prototype.onEnter = function($el) {
 
 		} else if (btn === 'fwd' && Player.getState() === Player.STATE_PLAYING) {
 			Player.forward();
+
+		} else if(btn === 'language' && Player.getState() !== Player.STATE_PAUSED){
+			if(this.listSeasonVisible){
+				this.hideSeasonList();
+			}
+
+			if(this.popUpVisible){
+				this.hideLanguage();
+
+			} else {
+				this.showLanguage();
+			}
+
+		} else if(btn === 'episodes' && Player.getState() !== Player.STATE_PAUSED){
+			if(this.popUpVisible){
+				this.hideLanguage();
+			}
+
+			if(this.listSeasonVisible){
+				this.hideSeasonList();
+
+			} else {
+				this.showSeasonList();
+			}
 		}
 
 		return false;
@@ -370,4 +446,31 @@ Scene_Player.prototype.moveScrubber = function(delta) {
 
 	this.$elScrubber.find('.scrubber-time').text(secondsToHours(this.scrubberTime / 1000));
 	this.$elScrubber.css('left', percentage + '%');
+};
+
+Scene_Player.prototype.showLanguage = function() {
+	this.popUpVisible = true;
+
+	this.$elLanguages.show();
+	Focus.to(this.$elLanguages.find('.focusable'));
+};
+
+Scene_Player.prototype.hideLanguage = function() {
+	this.popUpVisible = false;
+	this.$elLanguages.hide();
+	this.focus();
+};
+
+Scene_Player.prototype.showSeasonList = function() {
+	this.listSeasonVisible = true;
+
+	this.$el.toggleClass('ui-season', true);
+	this.$elUpBtnIcon.toggleClass('icon-down', true);
+};
+
+Scene_Player.prototype.hideSeasonList = function() {
+	this.listSeasonVisible = false;
+
+	this.$el.toggleClass('ui-season', false);
+	this.$elUpBtnIcon.toggleClass('icon-down', false);
 };

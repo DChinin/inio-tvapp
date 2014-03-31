@@ -114,6 +114,7 @@ var App = (function() {
 			this.navigation.hide();
 
 			Router.go('home');
+			
 		}, this)
 	};
 	/**
