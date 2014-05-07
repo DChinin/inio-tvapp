@@ -121,7 +121,7 @@ var Content = (function() {
 		xhr = new XMLHttpRequest();
 
 		xhr.onreadystatechange = function(ev) {
-			if (xhr.readyState === 4) {
+			if (xhr.readyState === 4 && xhr.status !== 0) {
 				resp = xhr.responseText;
 				tmp = xhr.getAllResponseHeaders();
 
@@ -148,8 +148,7 @@ var Content = (function() {
 					}
 				}
 
-				if (xhr.status === 0 || (xhr.status >= 400 && xhr.status <= 599)) {
-					console.log(xhr)
+				if (xhr.status >= 400 && xhr.status <= 599) {
 					if(console.network !== undefined){
 						console.network(uid, 'error', '>>> ' + xhr.statusText.toUpperCase() + ' [' + xhr.status + ' ' + xhr.statusText + '] ' + resp);
 					}

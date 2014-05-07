@@ -33,18 +33,25 @@ Scene_Catalog.prototype.onShow = function() {
 /**
  * @inheritdoc Scene#activate
  */
-Scene_Catalog.prototype.activate = function(filterId, filterName) {
+Scene_Catalog.prototype.activate = function(filterId, filterName, isTVShow) {
 	var reset;
 
 	this.filterName = filterName;
 	this.collection = Content.find('content.catalog');
+	this.isTVShow = isTVShow || false;
 
 	if(this.collection.filterId !== filterId){
 		reset = true;
 	}
 
 	return this.collection.load(filterId).done(function() {
-		//this.catalog.setFormat('landscape', 4, 4, 3);
+		if(this.isTVShow){
+			this.catalog.setFormat('landscape', 4, 4, 3);
+
+		} else {
+			this.catalog.setFormat('portrait', 3, 6, 2);
+		}
+
 		this.catalog.setCollection(this.collection, reset);
 	}, this);
 };
@@ -96,6 +103,11 @@ Scene_Catalog.prototype.onEnter = function($el) {
  * @inheritdoc Scene#onReturn
  */
 Scene_Catalog.prototype.onReturn = function() {
+	if(this.isTVShow){
+		Router.goBack();
+		return false;
+	}
+
 	App.sidebar.focus();
 	return false;
 };

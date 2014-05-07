@@ -27,11 +27,12 @@
 				width: @catalogItemWidth;
 				height: @catalogItemHeight;
 				border: none;
-				background: green;
+				background: url('../img/cover_loading.png') no-repeat center center;
+				background-size: cover;
 			}
 
 			img.no-image {
-				background: red;
+				background-image: url('../img/cover_no.png');
 			}
 
 			span {
@@ -40,6 +41,16 @@
 				color: #fff;
 				top: 10px;
 				left: 10px;
+			}
+
+			span.episode {
+				top: auto;
+				left: auto;
+				right: 20px;
+				bottom: 10px;
+				font-size: 200%;
+				font-weight: bold;
+				text-shadow: 0 1px 1px rgba(0, 0, 0, 0.85);
 			}
 		}
 

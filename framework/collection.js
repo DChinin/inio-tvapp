@@ -14,8 +14,7 @@ function Collection() {
 	this.construct.apply(this, arguments);
 };
 
-Collection.prototype.__proto__ = Events.prototype;
-Collection.prototype.__proto__.__proto__ = Deferrable.prototype;
+Collection.prototype.__proto__ = EventsDeferrable.prototype;
 
 /**
  * Construct object

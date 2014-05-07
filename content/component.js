@@ -14,6 +14,7 @@ function Component(path, id, attrs) {
 	this.items = [];
 	this.length = 0;
 	this.loaded = false;
+	this.onReadyCallbacks = [];
 
 	this.attributes(attrs);
 
@@ -30,7 +31,33 @@ Component.prototype.isStructured = false;
  * Init component
  */
 Component.prototype.init = function() {
+	this.ready();
+};
+/**
+ * Attach `onReady` callback
+ * @param {Function} callback
+ * @param {Object} [scope]
+ */
+Component.prototype.onReady = function(callback, scope) {
+	if(this.onReadyCallbacks instanceof Array){
+		this.onReadyCallbacks.push([callback, scope]);
+	}
+	
+	return this;
+};
+/**
+ * Exec `onReady` listeners
+ */
+Component.prototype.ready = function() {
+	if(this.onReadyCallbacks){
+		for(var i in this.onReadyCallbacks){
+			if(this.onReadyCallbacks[i] && typeof this.onReadyCallbacks[i][0] === 'function'){
+				this.onReadyCallbacks[i][0].apply(this.onReadyCallbacks[i][1] || this, arguments);
+			}
+		}
+	}
 
+	this.onReadyCallbacks = null;
 };
 /**
  * Return default attributes

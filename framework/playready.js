@@ -13,8 +13,7 @@ function Playready() {
 	this.construct.apply(this, arguments);
 };
 
-Playready.prototype.__proto__ = Events.prototype;
-Playready.prototype.__proto__.__proto__ = Deferrable.prototype;
+Playready.prototype.__proto__ = EventsDeferrable.prototype;
 
 /**
  * Construct object

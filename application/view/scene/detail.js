@@ -25,6 +25,7 @@ Scene_Detail.prototype.init = function() {
 
 Scene_Detail.prototype.setModel = function(model) {
 	this.video = model;
+	this.isTVShow = this.video.tvShowEpisode ? true : false;
 
 	this.rating = Math.round(parseFloat(model.rating) / 2);
 	this.actors = model.actors.join(', ');
@@ -80,6 +81,13 @@ Scene_Detail.prototype.render = function() {
 	return Template.render('scene-detail', this).done(function(html) {
 		this.$el.html(html);
 		this.$el.show();
+
+		if(this.isTVShow){
+			this.catalog.setFormat('landscape', 1, 4, 1);
+
+		} else {
+			this.catalog.setFormat('portrait', 1, 7, 1);
+		}
 
 		this.catalog.renderTo(this.$el.find('.movies'));
 	}, this);

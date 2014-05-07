@@ -14,8 +14,7 @@ function View() {
 	this.construct.apply(this, arguments);
 };
 
-View.prototype.__proto__ = Events.prototype;
-View.prototype.__proto__.__proto__ = Deferrable.prototype;
+View.prototype.__proto__ = EventsDeferrable.prototype;
 
 /**
  * Construct object

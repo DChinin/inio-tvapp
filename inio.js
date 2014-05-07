@@ -30,9 +30,18 @@ var Inio_JSON = [{
 			},
 			"items": [{
 				"component": "brightcove.filter",
-				"id": "brightcove",
+				"id": "",
 				"attrs": {}
 			}]
+		}, {
+			"component": "filter",
+			"id": "tvshows",
+			"attrs": {
+				"title": "TV Shows",
+				"icon": "tvseries",
+				"href": "tvshows"
+			},
+			"items": []
 		}]
 	}]
 }, {
@@ -66,6 +75,12 @@ var Inio_JSON = [{
 		"component": "brightcove.video",
 		"id": "detail",
 		"attrs": {}
+	}, {
+		"component": "brightcove.filter",
+		"id": "tvshows",
+		"attrs": {
+			"tvshows": true
+		}
 	}]
 }, {
 	"component": "wrapper",
@@ -88,7 +103,7 @@ var Inio_JSON = [{
 		"version": "1.0.2",
 		"appName": "inio",
 		"debug": {
-			"production": false
+			"production": true
 		},
 		"template": {
 			"basePath": "template/"

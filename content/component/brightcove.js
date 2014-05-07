@@ -45,6 +45,12 @@
 				rating: attrs.customFields.rating,
 				year: attrs.customFields.year
 			});
+
+			if(attrs.customFields.tvserie){
+				var tvserie = attrs.customFields.tvserie.split(/\,|\;/);
+				model.tvShowEpisode = ('0'+tvserie[1]).slice(-2);
+				model.tvShowSeason = ('0'+tvserie[0]).slice(-2);
+			}
 		}
 
 		return new Content_Model_Video(model);

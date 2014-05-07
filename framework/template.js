@@ -32,8 +32,7 @@ var Template = (function() {
 		}, this);
 	};
 
-	Factory.prototype.__proto__ = Events.prototype;
-	Factory.prototype.__proto__.__proto__ = Deferrable.prototype;
+	Factory.prototype.__proto__ = EventsDeferrable.prototype;
 
 	Factory.prototype.init = function(config) {
 		/**

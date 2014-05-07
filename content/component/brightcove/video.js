@@ -17,6 +17,7 @@
 	 */
 	Brightcove_Video.prototype.init = function() {
 		this.provider = Content.find('providers.brightcove');
+		this.ready();
 	};
 	/**
 	 * @inheritdoc Component#defaultAttributes
@@ -50,6 +51,10 @@
 				this.populate([resp]).done(function() {
 					promise.resolve();
 				}, this);
+				
+			} else {
+				// silent resolve
+				promise.resolve();
 			}
 		}, this);
 

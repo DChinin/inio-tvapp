@@ -11,8 +11,7 @@ function Model() {
 	this.construct.apply(this, arguments);
 };
 
-Model.prototype.__proto__ = Events.prototype;
-Model.prototype.__proto__.__proto__ = Deferrable.prototype;
+Model.prototype.__proto__ = EventsDeferrable.prototype;
 
 /**
  * Construct object

@@ -25,8 +25,7 @@ var App = (function() {
 
 	Factory.prototype.VERSION = '1.0.2';
 
-	Factory.prototype.__proto__ = Events.prototype;
-	Factory.prototype.__proto__.__proto__ = Deferrable.prototype;
+	Factory.prototype.__proto__ = EventsDeferrable.prototype;
 
 	/**
 	 * @event network
@@ -62,7 +61,10 @@ var App = (function() {
 				preloader(function() {
 					this.run();
 				}, this);
-			}, this);
+
+			}, this).fail(function(){
+				Inio.displayError('Connection to the provider failed. Please try again later.');
+			});
 
 		} catch (e) {
 			console.error(e);
@@ -107,6 +109,7 @@ var App = (function() {
 		Router
 			.addScene('home', new Scene_Home)
 			.addScene('catalog', new Scene_Catalog)
+			.addScene('tvshows', new Scene_Tvshows)
 			.addScene('detail', new Scene_Detail)
 			.addScene('player', new Scene_Player);
 

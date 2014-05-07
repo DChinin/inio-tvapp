@@ -10,6 +10,12 @@
 			font-size: 200%;
 			font-weight: 300;
 			text-transform: uppercase;
+
+			span.episode {
+				color: #888;
+				margin-right: 15px;
+				font-weight: bold;
+			}
 		}
 
 		.left {
@@ -151,7 +157,7 @@
 		}
 
 		.description {
-			display: none;
+			display: block;
 			height: @detailDescriptionHeight;
 			font-size: 140%;
 			line-height: 170%;
@@ -164,6 +170,7 @@
 		}
 
 		.staff {
+			display: none;
 			height: @detailDescriptionHeight;
 			font-size: 140%;
 			line-height: 170%;
@@ -200,8 +207,15 @@
 		}
 	}
 
+	.wrap-tvshow {
+		.right {
+			height: @detailDescriptionHeight + 85px;
+
+		}
+	}
+
 	.movies {
-		.catalog {
+		.catalog.format-portrait {
 			padding: 20px 0 0 21px;
 
 			li {
@@ -213,6 +227,10 @@
 					height: 228px;
 				}
 			}
+		}
+
+		.catalog.format-landscape {
+			padding: 20px 0 0 21px;
 		}
 	}
 }

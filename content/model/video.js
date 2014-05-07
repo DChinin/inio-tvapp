@@ -29,6 +29,8 @@ Content_Model_Video.prototype.defaultAttributes = function() {
 		countries: [],
 		parentalRating: '',
 		rating: 0,
-		year: 0
+		year: 0,
+		tvShowEpisode: null,
+		tvShowSeason: null
 	};
 };

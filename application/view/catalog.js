@@ -128,7 +128,12 @@ View_Catalog.prototype.renderItems = function() {
 			idx = startAt + i;
 
 			if (models[i]) {
-				str += '<li class="' + (i < maxVisible ? 'focusable' : '') + '" data-id="' + models[i].id + '" data-title="' + models[i].title + '"><img src="' + models[i].coverImg + '" alt="" /></li>';
+				if(models[i].tvShowEpisode){
+					str += '<li class="' + (i < maxVisible ? 'focusable' : '') + '" data-id="' + models[i].id + '" data-title="' + ('S'+models[i].tvShowSeason + 'E' + models[i].tvShowEpisode+'&nbsp;&nbsp;&nbsp;') +models[i].title + '"><img src="' + models[i].coverImg + '" alt="" /><span class="episode">'+models[i].tvShowEpisode+'</span></li>';
+
+				} else {
+					str += '<li class="' + (i < maxVisible ? 'focusable' : '') + '" data-id="' + models[i].id + '" data-title="' + models[i].title + '"><img src="' + models[i].coverImg + '" alt="" /></li>';
+				}
 
 			} else {
 				str += '<li class="empty">&nbsp;</li>';
