@@ -66,7 +66,11 @@ Scene_Player.prototype.init = function() {
 			return;
 		}
 
-		if(keyCode === Control.key.PLAY){
+		if(keyCode === Control.key.PLAYPAUSE && Player.getState() !== Player.STATE_PAUSED){
+			Player.pause();
+			return false;
+
+		} else if(keyCode === Control.key.PLAY){
 			Player.play();
 			return false;
 
@@ -197,6 +201,7 @@ Scene_Player.prototype.onBeforeShow = function() {
  * @inheritdoc Scene#onBeforeShow
  */
 Scene_Player.prototype.onBeforeHide = function() {
+	this._lastFocusBtn = null;
 	App.header.show();
 	App.sidebar.show();
 

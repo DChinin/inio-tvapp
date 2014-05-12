@@ -337,6 +337,8 @@ var Inio = {
 		$el.innerHTML = error.toString();
 
 		document.body.appendChild($el);
+
+		return $el;
 	}
 };
 

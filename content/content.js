@@ -170,6 +170,14 @@ var Content = (function() {
 		};
 
 		xhr.onerror = function(ev) {
+			if(console.network !== undefined){
+				if(xhr.status === 0 && ! resp){
+					resp = 'Connection refused';
+				}
+
+				console.network(uid, 'error', '>>> ' + xhr.statusText.toUpperCase() + ' [' + xhr.status + ' ' + xhr.statusText + '] ' + resp);
+			}
+			
 			promise.reject(ev.type || 'error', resp, headers, xhr);
 		};
 

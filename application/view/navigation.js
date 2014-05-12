@@ -71,7 +71,20 @@ View_Navigation.prototype.renderSubmenus = function() {
  * @inheritdoc View#focus
  */
 View_Navigation.prototype.focus = function() {
-	return Focus.to(this.getFocusable(0, true));
+	var el;
+
+	if(Router.activeSceneName === 'catalog' && Router.activeSceneArgs[1]){
+		el = this.$el.find('[data-id="'+Router.activeSceneArgs[1]+'"]');
+
+	} else if(Router.activeSceneName){
+		el = this.$el.find('[data-href="'+Router.activeSceneName+'"]');
+	}
+
+	if(! el || !el.length){
+		el = this.getFocusable(0, true);
+	}
+
+	return Focus.to(el);
 };
 /**
  * @inheritdoc View#navigate
@@ -132,6 +145,9 @@ View_Navigation.prototype.onFocus = function($el) {
 	if ($el.hasClass('main-item')) {
 		this.$el.find('li.active').removeClass('active');
 		$el.parent().addClass('active');
+
+	} else {
+		$el.parents('.submenu').parent().addClass('active');
 	}
 };
 /**

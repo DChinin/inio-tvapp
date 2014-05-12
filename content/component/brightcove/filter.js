@@ -24,7 +24,8 @@
 	 */
 	Brightcove_Filter.prototype.defaultAttributes = function() {
 		return {
-			tvshows: false
+			tvshows: false,
+			sortby: 'title'
 		};
 	};
 	/**
@@ -37,7 +38,7 @@
 	 * @inheritdoc Component#load
 	 */
 	Brightcove_Filter.prototype.load = function() {
-		var promise = new Promise(), tvshows = this.attr('tvshows');
+		var promise = new Promise(), tvshows = this.attr('tvshows'), sortby = this.attr('sortby');
 
 		Content.ajax(this.provider.attr('endpoint'), {
 			type: 'json',
@@ -62,6 +63,12 @@
 							_raw: resp.items[i]
 						});
 					}
+				}
+
+				if(sortby){
+					items.sort(function(a, b){
+						return a[sortby].localeCompare(b[sortby]);
+					});
 				}
 
 				this.populate(items).done(function() {

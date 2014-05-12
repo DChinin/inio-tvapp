@@ -66,10 +66,6 @@ Inio_Player_Lg.prototype.createPlayer = function(drm) {
  */
 Inio_Player_Lg.prototype.tick = function() {
 	if (this.url && this.el && typeof this.el.playTime !== 'undefined') {
-		if (!this.duration && this.el.playTime) {
-			this.onDurationChange(this.el.playTime);
-		}
-
 		if (this.el.playPosition) {
 			this.onTimeUpdate(this.el.playPosition);
 		}

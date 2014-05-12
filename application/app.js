@@ -106,6 +106,26 @@ var App = (function() {
 			scope.checkNetworkConnection();
 		}, 1000);
 
+		this.on('network', function(status){
+			if(this.$elError){
+				document.body.removeChild(this.$elError);
+				this.$elError = null;
+			}
+
+			if(!status){
+				Control.disable();
+
+				if(Player.getState() === Player.STATE_PLAYING){
+					Player.pause();
+				}
+
+				this.$elError = Inio.displayError('Network disconnected. Please check the Internet connection.');
+
+			} else {
+				Control.enable();
+			}
+		}, this);
+
 		Router
 			.addScene('home', new Scene_Home)
 			.addScene('catalog', new Scene_Catalog)

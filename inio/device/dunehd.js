@@ -66,7 +66,7 @@ Inio_Device_Dunehd.prototype.getKeyMap = function() {
 		GREEN: 194,
 		YELLOW: 195,
 		BLUE: 196,
-		PLAY: 250,
+		PLAY: 218, // 250
 		PAUSE: -1,
 		PLAYPAUSE: 218,
 		STOP: 178,

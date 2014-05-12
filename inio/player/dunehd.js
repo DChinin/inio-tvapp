@@ -78,10 +78,11 @@ Inio_Player_Dunehd.prototype.native = function(cmd, attrs) {
 
 			console.network('PLAYER', this.url);
 
-			this.API.play(url);
 			this.state(this.STATE_BUFFERING);
+			this.API.play(url);
 
 		} else {
+			this.state(this.STATE_PLAYING);
 			this.API.resume();
 		}
 
