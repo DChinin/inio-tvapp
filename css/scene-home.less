@@ -1,6 +1,15 @@
 #scene-home {
+	.carousel-wrapper {
+		overflow: hidden;
+		height: 320px;
+		opacity: 1;
+		transition: all 0.35s;
+		-o-transition: all 0.35s;
+		-webkit-transition: all 0.35s;
+	}
+
 	.catalog {
-		padding: 56px 0 0 21px;
+		padding: 30px 0 0 21px;
 
 		li {
 			width: 151px;
@@ -11,5 +20,12 @@
 				height: 228px;
 			}
 		}
+	}
+}
+
+#scene-home.catalog-expand {
+	.carousel-wrapper {
+		height: 0;
+		opacity: 0;
 	}
 }

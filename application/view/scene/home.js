@@ -14,8 +14,8 @@ Scene_Home.prototype.__proto__ = Scene.prototype;
 Scene_Home.prototype.init = function() {
 	this.carousel = new View_Carousel(this);
 	this.catalog = new View_Catalog(this, {
-		rows: 1,
-		rowsVisible: 1,
+		rows: 3,
+		rowsVisible: 2,
 		cols: 7
 	});
 
@@ -23,7 +23,13 @@ Scene_Home.prototype.init = function() {
 		App.header.setBreadcrumbPath([title]);
 	}, this);
 
-	this.catalog.on('select', function($el, title) {
+	this.catalog.on('select', function($el, title, index) {
+		if(index >= this.catalog.cols){
+			this.expandCatalog();
+		} else {
+			this.collapseCatalog();
+		}
+
 		App.header.setBreadcrumbPath([title]);
 	}, this);
 };
@@ -32,6 +38,12 @@ Scene_Home.prototype.init = function() {
  */
 Scene_Home.prototype.onShow = function() {
 	App.throbber();
+};
+/**
+ * @inheritdoc Scene#onHide
+ */
+Scene_Home.prototype.onHide = function() {
+	this.catalogFocused = this.catalog.hasFocus();
 };
 /**
  * @inheritdoc Scene#activate
@@ -67,6 +79,10 @@ Scene_Home.prototype.render = function() {
  * @inheritdoc Scene#focus
  */
 Scene_Home.prototype.focus = function() {
+	if(this.catalogFocused){
+		return this.catalog.focus();
+	}
+
 	this.carousel.focus();
 };
 /**
@@ -98,7 +114,7 @@ Scene_Home.prototype.onReturn = function() {
  */
 Scene_Home.prototype.navigate = function(direction) {
 	if(direction === 'up'){
-		if(this.catalog.hasFocus()){
+		if(this.catalog.hasFocus() && this.catalog.navigate(direction) !== false){
 			this.carousel.focus();
 			return false;
 		}
@@ -109,4 +125,12 @@ Scene_Home.prototype.navigate = function(direction) {
 			return false;
 		}
 	}
+};
+
+Scene_Home.prototype.expandCatalog = function() {
+	this.$el.addClass('catalog-expand');
+};
+
+Scene_Home.prototype.collapseCatalog = function() {
+	this.$el.removeClass('catalog-expand');
 };

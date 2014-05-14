@@ -67,7 +67,7 @@ View_Catalog.prototype.setIndex = function(index) {
 		max = 0;
 
 	} else {
-		rows = Math.floor(this.collection.length / this.cols);
+		rows = Math.ceil(this.collection.length / this.cols) - (this.rowsVisible - 1);
 		itemsLeft = this.collection.length - (rows * this.cols);
 		max = ((rows - (this.rows - this.rowsVisible) - (itemsLeft ? 0 : 1)) * this.cols);
 	}
@@ -111,7 +111,7 @@ View_Catalog.prototype.onFocus = function($el) {
 
 	title = $el.attr('data-title');
 
-	this.trigger('select', $el, title);
+	this.trigger('select', $el, title, this._focusIndex);
 };
 View_Catalog.prototype.renderItems = function() {
 	var startAt = 0,
@@ -177,7 +177,7 @@ View_Catalog.prototype.navigate = function(direction) {
 			return false;
 		}
 
-	} else if (direction === 'down' && this.rowsVisible > 1) {
+	} else if (direction === 'down' && this.rowsVisible >= 1) {
 		if (Focus.to(this.getFocusable(this.cols, true)) === false) {
 			if (this.setIndex(this.index + this.cols) === true) {
 				this.renderItems();
@@ -189,7 +189,7 @@ View_Catalog.prototype.navigate = function(direction) {
 			return false;
 		}
 
-	} else if (direction === 'up' && this.rowsVisible > 1) {
+	} else if (direction === 'up' && this.rowsVisible >= 1) {
 		if (Focus.to(this.getFocusable(-1 * this.cols, true)) === false) {
 			if (this.setIndex(this.index - this.cols) === true) {
 				this.renderItems();

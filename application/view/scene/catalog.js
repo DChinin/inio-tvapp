@@ -81,6 +81,17 @@ Scene_Catalog.prototype.focus = function() {
 	if(this.catalog.focus() === false){
 		App.sidebar.focus();
 	}
+
+	if(!this.collection.length){
+		var dialog = new View_Dialog_Error({
+			title: 'Not available',
+			text:  'Sorry, there is currently no content'
+		});
+		dialog.on('close', function() {
+			Router.goBack();
+		}, this);
+		dialog.open();
+	}
 };
 /**
  * @inheritdoc Scene#onClick

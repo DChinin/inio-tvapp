@@ -1,10 +1,10 @@
-<div class="wrap">
+<div class="wrap{{#video.tvShowEpisode}} wrap-tvshow{{/video.tvShowEpisode}}">
 	<div class="icons">
 		<span class="icon-hd"></span>
 		<span class="icon-18"></span>
 	</div>
 
-	<h1>{{video.title}}</h1>
+	<h1>{{#video.tvShowEpisode}}<span class="episode">{{video.tvShowEpisode}}</span>{{/video.tvShowEpisode}}{{video.title}}</h1>
 
 	<div class="left">
 		<div class="attributes">

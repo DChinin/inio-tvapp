@@ -122,7 +122,8 @@ var App = (function() {
 				this.$elError = Inio.displayError('Network disconnected. Please check the Internet connection.');
 
 			} else {
-				Control.enable();
+				//Control.enable();
+				window.location.reload();
 			}
 		}, this);
 
