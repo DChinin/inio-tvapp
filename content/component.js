@@ -188,7 +188,7 @@ Component.prototype.getLength = function() {
  * @return {Object}
  */
 Component.prototype.normalize = function(attrs) {
-	return Inio.extend({}, attrs);
+	return Content.extend({}, attrs);
 };
 /**
  * Get model at position (supports lazy loading)

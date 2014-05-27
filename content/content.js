@@ -22,6 +22,94 @@ var Content = (function() {
 
 		return this.parser.load();
 	};
+
+	/**
+	 * Extend object
+	 *
+	 * @param {Object} target
+	 * @param {Object} source (1...n)
+	 * @returns {Object}
+	 */
+	Factory.prototype.extend = function(target) {
+		var i = 1,
+			o, n, isDefinedProperty, defineProperty;
+
+		isDefinedProperty = function(obj) {
+			return (typeof obj == 'object' && (
+				obj.hasOwnProperty('value') || obj.hasOwnProperty('writable') || obj.hasOwnProperty('configurable') || obj.hasOwnProperty('get') || obj.hasOwnProperty('set')
+			));
+		};
+
+		defineProperty = function(obj, prop, desc) {
+			if (Object.defineProperty) {
+				return Object.defineProperty(obj, prop, desc);
+			}
+
+			obj[prop] = desc.value;
+		};
+
+		for (; i < arguments.length; i++) {
+			if ((o = arguments[i]) !== null) {
+				for (n in o) {
+					if (o[n] === null || target[n] === null || (typeof o[n] === 'object' && o[n].constructor !== Object)) {
+						target[n] = o[n];
+
+					} else if (o[n] instanceof Array || target[n] instanceof Array) {
+						target[n] = this.extend([], target[n], o[n]);
+
+					} else if (typeof o[n] === 'object' || typeof target[n] === 'object') {
+						if (isDefinedProperty(o[n])) {
+							defineProperty(target, n, o[n]);
+
+						} else {
+							target[n] = this.extend({}, target[n], o[n]);
+						}
+
+					} else {
+						target[n] = o[n];
+					}
+				}
+			}
+		}
+
+		return target;
+	};
+	/*
+	 * Binding function for prevent scope or global variables.
+	 *
+	 * @param {Function} func called function
+	 * @param {Object} scope which scope has to function use ?
+	 * @param {Array} addArg array of arguments which are passed to function
+	 * @returns {Function} returns new function
+	 */
+	Factory.prototype.bind = function(func, scope, addArg) {
+		return function() {
+			if (addArg) {
+				var args = Array.prototype.slice.call(arguments);
+				return func.apply(scope, args.concat(addArg));
+			} else
+				return func.apply(scope, arguments);
+		};
+	};
+
+	/**
+	 * Serialize object into query string
+	 *
+	 * @param {Object} obj
+	 * @returns {String}
+	 */
+	Factory.prototype.param = function(obj) {
+		var parts = [];
+
+		for (var i in obj) {
+			if (obj.hasOwnProperty(i)) {
+				parts.push(encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]));
+			}
+		}
+
+		return parts.join("&").replace(/%20/g, "+");
+	};
+
 	/**
 	 * Register new component
 	 *
@@ -62,8 +150,11 @@ var Content = (function() {
 			return this.instances[path];
 
 		} catch (e) {
-			console.error(e);
-			Inio.displayError(e);
+			console.error(e, this.parser);
+
+			if(typeof Inio !== 'undefined' && typeof Inio.displayError === 'function'){
+				Inio.displayError(e);
+			}
 		}
 
 		return false;
@@ -100,7 +191,7 @@ var Content = (function() {
 			return arr.join('&');
 		};
 
-		opts = Inio.extend({
+		opts = this.extend({
 			method: 'GET', // GET, POST, PUT, etc.
 			type: '', // html, json, jsonp, xml
 			data: null, // payload

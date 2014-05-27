@@ -72,7 +72,7 @@
 		model.coverImg = this.provider.getTumbnail(attrs, 178);
 
 		if (attrs.customFields) {
-			Inio.extend(model, {
+			Content.extend(model, {
 				actors: (attrs.customFields.actors || '').split(/\,\s?/),
 				directors: (attrs.customFields.directors || '').split(/\,\s?/),
 				countries: (attrs.customFields.countries || '').split(/\,\s?/),
